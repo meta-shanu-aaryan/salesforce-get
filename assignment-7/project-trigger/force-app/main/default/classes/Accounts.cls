@@ -29,7 +29,7 @@ public with sharing class Accounts extends fflib_SObjectDomain {
         checkAndUpdateBillingBillingCity(records, existingRecords);
     }
 
-    public void checkAndUpdateBillingBillingCity(List<Account> records, Map<Id, SObject> existingRecords){
+    public void checkAndUpdateBillingCity(List<Account> records, Map<Id, SObject> existingRecords){
         // key -> account Id, value -> the mailing city value we want to give it 
         Map<Id, String> accountIdToCityMap = new Map<Id, String>();
         
