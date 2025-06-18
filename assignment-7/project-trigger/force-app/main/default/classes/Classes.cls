@@ -13,7 +13,7 @@ public with sharing class Classes extends fflib_SObjectDomain {
 
     public override void onBeforeDelete(){
         deletionCheck((List<Class__c>) Records);
-    }
+    }   
 
     public override void onAfterUpdate(Map<Id,SObject> existingRecords){
         List<Id> classIdList = new List<Id>();
