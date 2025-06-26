@@ -1,0 +1,136 @@
+<aura:component implements="flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="ContactListController">
+    <aura:handler name="init" value="{!this}" action="{!c.getCont}" /> 
+    <aura:attribute name="rec" type="Object" /> 
+    <aura:attribute name="handleModalOpen" type="Boolean" default="false"/>
+    <aura:attribute name="contactData" type="Map" default="{'firstName':'','lastName':'','phone':'','email':''}"/>
+    <aura:attribute name="createdContactId" type="String"/>
+    <aura:attribute name="selectedContact" type="List"/>
+    <aura:attribute name="editModalOpen" type="Boolean" default="false"/>
+    <aura:attribute name="editContactData" type="Map" default="{'FirstName':'','LastName':'','Phone':'','Email':''}"/>
+    <br></br>
+    
+    <div>
+        <lightning:button label="Create Contact" onclick="{!c.modalOpenFunc}" variant="success"/>
+        <lightning:button label="Edit Contact" class="" onclick="{!c.editContact}" variant="secondary"/>
+        <lightning:button label="Delete Contact" class="" onclick="{!c.deleteSelectedContact}" variant="danger"/>
+    </div>
+    
+    <aura:if isTrue="{!v.handleModalOpen}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_medium">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close" onclick="{!c.modalCloseFunc}">
+                    <lightning:icon icon-name="standard:lead" alternative-text="Lead" title="Close">
+                    </lightning:icon>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">Create Contact</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:input value="{!v.contactData.firstName}" label="First Name" PlaceHolder="Enter your First Name..." />
+                    <lightning:input label="Last Name" placeholder="Enter Last Name..." value="{!v.contactData.lastName}"/>
+                    <lightning:input label="Phone Number" placeholder="Enter Phone Number..." value="{!v.contactData.phone}"/>
+                    <lightning:input label="Email Id" placeholder="Enter Email Address..." value="{!v.contactData.email}"/>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick="{!modalCloseFunc}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.createCont}">Save</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.editModalOpen}">
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_medium">
+            <div class="slds-modal__container">
+                <button class="slds-button slds-button_icon slds-modal__close" onclick="{!c.closeEditModal}">
+                    <lightning:icon icon-name="standard:lead" alternative-text="Lead" title="Close">
+                    </lightning:icon>
+                    <span class="slds-assistive-text">Cancel and close</span>
+                </button>
+                <div class="slds-modal__header">
+                    <h1 id="modal-heading-01" class="slds-modal__title slds-hyphenate" tabindex="-1">Create Contact</h1>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:input value="{!v.editContactData.FirstName}" label="First Name" PlaceHolder="Enter your First Name..." />
+                    <lightning:input label="Last Name" placeholder="Enter Last Name..." value="{!v.editContactData.LastName}"/>
+                    <lightning:input label="Phone Number" placeholder="Enter Phone Number..." value="{!v.editContactData.Phone}"/>
+                    <lightning:input label="Email Id" placeholder="Enter Email Address..." value="{!v.editContactData.Email}"/>
+                </div>
+                <div class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" aria-label="Cancel and close" onclick="{!c.closeEditModal}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.saveEditedChanges}">Save</button>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open" role="presentation"></div>
+    </aura:if>
+    
+    
+    <table aria-multiselectable="true" class="slds-table slds-table_bordered slds-table_fixed-layout slds-table_resizable-cols" role="grid" aria-label="Example advanced table of Opportunities in actionable mode"> 
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th class="slds-text-align_right slds-cell_action-mode" scope="col" style="width:3.25rem">
+                    <span id="column-group-header" class="slds-assistive-text">Choose a row</span>
+                    <div class="slds-th__action slds-th__action_form">
+                        <div class="slds-checkbox">
+                            <input type="checkbox" name="options" id="checkbox-unique-id-297" value="checkbox-unique-id-297" tabindex="0" aria-labelledby="check-select-all-label column-group-header" />
+                            <label class="slds-checkbox__label" for="checkbox-unique-id-297" id="check-select-all-label">
+                                <span class="slds-checkbox_faux"></span>
+                                <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                            </label>
+                        </div>
+                    </div>
+                </th>
+                <th aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                    <div title="Name">Name</div>
+                </th>
+                <th aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                    <span class="slds-truncate" title="Name">Phone</span>
+                </th>
+                <th aria-sort="none" class="slds-is-resizable slds-is-sortable slds-cell_action-mode" scope="col">
+                    <span class="slds-truncate" title="Name">Email</span>
+                </th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            <aura:iteration items="{!v.rec}" var="curr">
+                <tr aria-selected="false" class="slds-hint-parent">
+                    <td class="slds-text-align_right slds-cell_action-mode" role="gridcell">
+                        <div class="slds-checkbox">
+                            <input type="checkbox"
+                                   aura:id="recordCheckbox"
+                                   name="options" 
+                                   id="{! 'checkbox-' + curr.Id }" 
+                                   value="{! curr.Id }" 
+                                   tabindex="0" 
+                                   aria-labelledby="{! 'label-' + curr.Id + ' column-group-header' }" />
+                            
+                            <label class="slds-checkbox__label" 
+                                   for="{! 'checkbox-' + curr.Id }" 
+                                   id="{! 'label-' + curr.Id }">
+                                <span class="slds-checkbox_faux"></span>
+                                <span class="slds-form-element__label slds-assistive-text">
+                                    Select {! curr.Name }
+                                </span>
+                            </label>
+                        </div>
+                    </td>
+                    <th data-label="Contact Name" scope="row">
+                        <div class="slds-truncate" title="{!curr.Name}">
+                            <a href="#" tabindex="{!curr.Name}">{!curr.Name}</a>
+                        </div>
+                    </th>
+                    <td>
+                        <div class="slds-truncate" title="{!curr.Phone}">{!curr.Phone}</div>
+                    </td>
+                    <td>
+                        <div class="slds-truncate" title="{~curr.Email}">{!curr.Email}</div>
+                    </td>
+                </tr>
+            </aura:iteration>
+        </tbody>
+    </table> 
+</aura:component>

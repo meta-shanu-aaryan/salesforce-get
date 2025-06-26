@@ -1,0 +1,11 @@
+<template>
+    <lightning-modal-header label="Edit Contact"></lightning-modal-header>
+    <lightning-modal-body> 
+        <div>Are you Sure, You want to delete these Contacts? This can't be revert back.</div>
+        <div>selectedIds : {contactIds}</div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="Cancel" onclick={handleOkay}></lightning-button>
+        <lightning-button label="Confirm" onclick={handleContactDelete} variant="destructive"></lightning-button>
+    </lightning-modal-footer>
+</template>

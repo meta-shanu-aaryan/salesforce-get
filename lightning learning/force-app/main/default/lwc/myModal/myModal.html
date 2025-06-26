@@ -1,0 +1,16 @@
+<template>
+    <lightning-modal-header label="Create Contact"></lightning-modal-header>
+    <lightning-modal-body> 
+        <div class="slds-p-around_medium">
+            <lightning-input type="text" label="First Name" onchange={handleChange} value={contactData.firstName} name="firstName"></lightning-input>
+            <lightning-input type="text" label="Last Name" onchange={handleChange} value={contactData.lastName} name="lastName"></lightning-input>
+            <lightning-input type="text" label="Phone Number" onchange={handleChange} value={contactData.phone} name="phone"></lightning-input>
+            <lightning-input type="text" label="Email Address" onchange={handleChange} value={contactData.email} name="email"></lightning-input>
+             <!-- shanu was here -->
+        </div>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <lightning-button label="Cancel" onclick={handleOkay}></lightning-button>
+        <lightning-button label="Create Contact" onclick={handleContactCreate}></lightning-button>
+    </lightning-modal-footer>
+</template>

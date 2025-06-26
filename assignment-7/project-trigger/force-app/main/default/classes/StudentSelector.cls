@@ -23,7 +23,7 @@ public with sharing class StudentSelector extends fflib_SObjectSelector {
             classIdList.add(cl.Id);
         }
 
-        String query = 'SELECT ClassName__c, COUNT(Id) FROM Student__c WHERE Sex__c = \'Female\' GROUP BY ClassName__c HAVING ClassName__c IN (\'' + String.join(classIdList, ',') + '\')';
+        String query = 'SELECT ClassName__c, COUNT(Id) FROM Student__c WHERE Sex__c = \'Female\' GROUP BY ClassName__c HAVING ClassName__c IN (\'' + String.join(classIdList, '\',\'') + '\')';
 
         List<AggregateResult> result = (List<AggregateResult>) Database.query(query);
 
