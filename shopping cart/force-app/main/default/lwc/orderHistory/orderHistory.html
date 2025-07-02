@@ -1,0 +1,18 @@
+<template>
+    <lightning-card variant="Narrow" title="Order History" icon-name="standard:account">
+        <div>
+            <template if:true={orderHistoryLength}>
+                <div>
+                    <lightning-datatable key-field="id" data={orderHistory} columns={columns}>
+                    </lightning-datatable>
+                </div>
+            </template>
+            <template if:false={orderHistoryLength}>
+                <div>
+                    <p class="">No Orders Available</p>
+                </div>
+            </template>
+        </div>
+        <p slot="footer">Card Footer</p>
+    </lightning-card>
+</template>

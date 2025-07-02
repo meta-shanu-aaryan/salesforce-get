@@ -1,0 +1,15 @@
+<template>
+    <lightning-card title="My Cart" icon-name="utility:cart" variant="Narrow">
+        <template if:true={itemListLengthCheck}>
+            <div>
+                <lightning-datatable key-field="id" data={itemList} columns={columns} onrowselection={selectProduct}>
+                </lightning-datatable>
+            </div>
+            <lightning-button label="Checkout Cart" slot="actions" onclick={checkOutCart}
+                variant="brand"></lightning-button>
+            <lightning-button icon-name="utility:clear" label="Clear Cart" slot="actions" onclick={handleClearCart}
+                variant="destructive" class="slds-m-left_small"></lightning-button>
+        </template>
+        <p slot="footer">Copyright goes to Andrewbie!</p>
+    </lightning-card>
+</template>

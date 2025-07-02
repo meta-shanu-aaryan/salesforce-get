@@ -1,0 +1,19 @@
+<template>
+    <lightning-card variant="Narrow" title="Product List" icon-name="standard:account">
+        <template if:true={productListLength}>
+            <div class="slds-grid slds-gutters slds slds-p-horizontal_small">
+                <lightning-input type="search" onchange={handleSearch} class="slds-m-bottom_small slds-col slds-size_2-of-3" label="Search Products"></lightning-input>
+                <lightning-button label="Add To Cart" onclick={handleAddToCart} variant="brand" class="slds-col slds-size_1-of-3 slds-m-top_large"></lightning-button>
+            </div>
+            <div>
+                <lightning-datatable key-field="id" data={filteredProductList} columns={columns} onrowselection={getSelectedName}>
+                </lightning-datatable>
+            </div>
+        </template>
+        <template if:false={productListLength}>
+            <p>Product is not available</p>
+        </template>
+        <p slot="footer">Copyright goes to Andrewbie!!!</p>
+    </lightning-card>
+
+</template>
