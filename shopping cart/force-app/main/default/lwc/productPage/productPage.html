@@ -1,13 +1,18 @@
 <template>
     <lightning-card variant="Narrow" title="Product List" icon-name="standard:account">
         <template if:true={productListLength}>
-            <div class="slds-grid slds-gutters slds slds-p-horizontal_small">
+            <div class="slds-grid slds-gutters slds-p-horizontal_small">
                 <lightning-input type="search" onchange={handleSearch} class="slds-m-bottom_small slds-col slds-size_2-of-3" label="Search Products"></lightning-input>
                 <lightning-button label="Add To Cart" onclick={handleAddToCart} variant="brand" class="slds-col slds-size_1-of-3 slds-m-top_large"></lightning-button>
             </div>
             <div>
-                <lightning-datatable key-field="id" data={filteredProductList} columns={columns} onrowselection={getSelectedName}>
+                <lightning-datatable key-field="id" data={productListToShow} columns={columns} onrowselection={getSelectedName}>
                 </lightning-datatable>
+            </div>
+            <div class="slds-grid slds-gutters slds-m-top_medium">
+                <lightning-button label="Prev" icon-name="utility:left" class="slds-col slds-size_1-of-3 slds-align_absolute-center" disabled={_disablePrevious} onclick={handleClickPrev}></lightning-button>
+                <div class="slds-col slds-size_1-of-3 slds-align_absolute-center">Page {currentPage} of {totalPage}</div>
+                <lightning-button label="Next" icon-name="utility:right" class="slds-col slds-size_1-of-3 slds-align_absolute-center" disabled={_disableNext} onclick={handleClickNext}></lightning-button>
             </div>
         </template>
         <template if:false={productListLength}>

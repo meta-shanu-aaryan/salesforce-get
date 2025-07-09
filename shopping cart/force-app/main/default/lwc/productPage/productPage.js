@@ -1,4 +1,4 @@
-import { LightningElement, wire } from 'lwc';
+import { LightningElement, track, wire } from 'lwc';
 import Toast from 'lightning/toast';
 import getAllProduct from '@salesforce/apex/ProductController.getAllProduct';
 import addToCart from '@salesforce/apex/CartController.addToCart';
@@ -25,6 +25,9 @@ export default class ProductPage extends LightningElement {
     @wire(getAllProduct)
     prodWire(response) {
         this.filteredProductList = response.data;
+        this.productListToShow = this.filteredProductList?.length < this.pageSize ? this.filteredProductList : this.filteredProductList?.slice(0, this.pageSize);
+        this.currentPage = 1;
+        this.totalPage = Math.ceil(this.filteredProductList?.length / this.pageSize);
     }
 
 
@@ -67,6 +70,36 @@ export default class ProductPage extends LightningElement {
         }else{
             this.filteredProductList = await searchProduct({searchTerm : searchKey});
         }
+        this.productListToShow = this.filteredProductList?.length < this.pageSize ? this.filteredProductList : this.filteredProductList?.slice(0, this.pageSize);
+        this.currentPage = 1;
+        this.totalPage = Math.ceil(this.filteredProductList?.length / this.pageSize);
     }
 
+
+    @track currentPage;
+    @track totalPage;
+    @track pageSize = 10;
+    @track productListToShow = [];
+
+    handleClickPrev(){
+        if(this.currentPage > 1){
+            this.currentPage = this.currentPage - 1;
+            this.productListToShow = this.filteredProductList?.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+        }
+    }
+
+    handleClickNext(){
+        if(this.currentPage < this.totalPage){
+            this.currentPage = this.currentPage + 1;
+            this.productListToShow = this.filteredProductList?.slice((this.currentPage - 1) * this.pageSize, this.currentPage * this.pageSize);
+        }
+    }
+
+    get _disablePrevious(){
+        return this.currentPage === 1 ? true : false;
+    }
+
+    get _disableNext(){
+      return this.currentPage === this.totalPage ? true : false;
+    }
 }
