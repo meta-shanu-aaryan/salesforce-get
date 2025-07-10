@@ -1,0 +1,45 @@
+<apex:page controller="ManageClassExtension">
+    <apex:form >
+        <apex:pageBlock title="Class Management Page">
+
+            <apex:pageBlockTable value="{!classes}" var="cls">
+                <apex:column value="{!cls.Id}" headerValue="Class ID"/>
+                <apex:column value="{!cls.Name}" headerValue="Class Name"/>
+                <apex:column value="{!cls.Max_Size__c}" headerValue="Max Size"/>
+                <apex:column value="{!cls.Current_Strength__c}" headerValue="Current Strength"/>
+                <apex:column headerValue="Edit">
+                    <apex:commandButton value="Edit" onclick="editRecord('{!cls.Id}'); return false;" />
+                </apex:column>
+                <apex:column headerValue="Delete">
+                    <apex:commandButton value="Delete" onclick="deleteRecord('{!cls.Id}'); return false;"/>
+                </apex:column>
+            </apex:pageBlockTable>
+
+            <apex:outputPanel id="editSection">
+                <apex:outputPanel rendered="{!showEditForm}">
+                    <apex:pageBlock title="Edit Class">
+                        <apex:pageBlockSection columns="1">
+                            <apex:inputField value="{!selectedClass.Name}"/>
+                            <apex:inputField value="{!selectedClass.Max_Size__c}"/>
+                            <apex:inputField value="{!selectedClass.Current_Strength__c}"/>
+                        </apex:pageBlockSection>
+                        <apex:pageBlockButtons location="bottom">
+                            <apex:commandButton value="Save" action="{!saveFnc}" reRender="editSection"/>
+                            <apex:commandButton value="Cancel" action="{!cancelFnc}" reRender="editSection"/>
+                        </apex:pageBlockButtons>
+                    </apex:pageBlock>
+                </apex:outputPanel>
+            </apex:outputPanel>
+        </apex:pageBlock>
+
+        <!-- Action Function to pass ID -->
+        <apex:actionFunction name="editRecord" action="{!editClassById}" reRender="editSection">
+            <apex:param name="editId" assignTo="{!$CurrentPage.parameters.editId}" value="" />
+        </apex:actionFunction>
+
+        <apex:actionFunction name="deleteRecord" action="{!deleteClassById}" reRender="">
+            <apex:param name="deleteId" assignTo="{!$CurrentPage.parameters.deleteId}" value="" />
+        </apex:actionFunction>
+
+    </apex:form>
+</apex:page>
