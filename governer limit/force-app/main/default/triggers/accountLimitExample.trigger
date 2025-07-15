@@ -22,7 +22,7 @@ trigger accountLimitExample on Account (after delete, after insert, after update
 
 //Proactively determine if there are too many Opportunities to update and avoid governor limits
 
-    if( true /**** insert condition to determine too many opportunities to update ****/) {
+    if(opptys.size() > Limits.getLimitDmlRows()) {
 
 // Logic to avoid governor limits - addError
 
