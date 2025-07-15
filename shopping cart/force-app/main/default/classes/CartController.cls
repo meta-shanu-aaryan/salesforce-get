@@ -1,9 +1,24 @@
 public with sharing class CartController {
+
+    @TestVisible
+    private static CartSelector cartSelector;
+
+    public CartController(CartSelector injectedCartSelector){
+        cartSelector = injectedCartSelector;
+    }
+
+    public CartController(){
+        cartSelector = new CartSelector();
+    }
+    
+    static{
+        cartSelector = new CartSelector();
+    }
     
     @AuraEnabled
 public static Boolean addToCart(List<Id> itemIds){
     try {
-        System.debug(LoggingLevel.DEBUG, 'entered');
+        // System.debug(LoggingLevel.DEBUG, 'entered');
         List<CartItem__c> cartItemList = [SELECT Id, Product__c, Quantity__c FROM CartItem__c WHERE Product__c IN :itemIds];
 
         List<Id> itemToUpdate = new List<Id>();
@@ -40,9 +55,11 @@ public static Boolean addToCart(List<Id> itemIds){
     @AuraEnabled
     public static List<CartItem__c> getCartItems(){
         try {
-            List<CartItem__c> cartItemList = [SELECT Product__c, Product__r.Name, Product__r.SellingPrice__c, Quantity__c FROM CartItem__c];
+            // List<CartItem__c> cartItemList = [SELECT Product__c, Product__r.Name, Product__r.SellingPrice__c, Quantity__c FROM CartItem__c];
 
-            return cartItemList;
+            // return cartItemList;
+
+            return cartSelector.getCartItems();
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }

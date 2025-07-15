@@ -1,18 +1,24 @@
-public with sharing class OrderController extends fflib_SObjectDomain {
-    
-    public OrderController(List<PurchaseOrder__c> sObjectList) {
-        super(sObjectList);
+public with sharing class OrderController {
+
+    @TestVisible
+    private static OrderSelector orderSelector;
+
+    public OrderController(OrderSelector injectedOrderSelector){
+        orderSelector = injectedOrderSelector;
     }
-    public class Constructor implements fflib_SObjectDomain.IConstructable {
-        public fflib_SObjectDomain construct(List<SObject> sObjectList) {
-            return new OrderController(sObjectList);
-        }
+
+    public OrderController(){
+        orderSelector = new orderSelector();
+    }
+    
+    static{
+        orderSelector = new orderSelector();
     }
 
     @AuraEnabled (cacheable = true)
     public static List<PurchaseOrder__c> getRecentOrders(){
         try {
-            return OrderSelector.getLastOrders();
+            return orderSelector.getLastOrders();
         } catch (Exception e) {
             throw new AuraHandledException(e.getMessage());
         }
@@ -34,22 +40,22 @@ public with sharing class OrderController extends fflib_SObjectDomain {
             productIds.add(pi.Product__c);
         }
 
-        Map<Id, Integer> orderItemsMap = ProductSelector.getProductAvailabilityMap(productIds);
+        // Map<Id, Integer> orderItemsMap = ProductSelector.getProductAvailabilityMap(productIds);
 
-        for (PurchaseOrderLineItem__c orderItemObj : orderItems) {
-            if(orderItemsMap.get(orderItemObj.Product__c) < orderItemObj.Quantity__c){
-                throw new Exception('One or Multiple Product does not have the required quantity');
-            }
-            totalAmount += orderItemObj.Quantity__c * orderItemObj.PricePerUnit__c;
-        }
+        // for (PurchaseOrderLineItem__c orderItemObj : orderItems) {
+        //     if(orderItemsMap.get(orderItemObj.Product__c) < orderItemObj.Quantity__c){
+        //         throw new Exception('One or Multiple Product does not have the required quantity');
+        //     }
+        //     totalAmount += orderItemObj.Quantity__c * orderItemObj.PricePerUnit__c;
+        // }
 
         order.TotalAmount__c = totalAmount;
         insert order;
 
-        Map<Id, Integer> productQuantityMap = new Map<Id, Integer>();
+        // Map<Id, Decimal> productQuantityMap = new Map<Id, Decimal>();
         for (PurchaseOrderLineItem__c orderItemObj : orderItems) {
             orderItemObj.PurchaseOrder__c = order.Id;
-            productQuantityMap.put(orderItemObj.Product__c, orderItemObj.Quantity__c);
+            // productQuantityMap.put(orderItemObj.Product__c, orderItemObj.Quantity__c);
         }
 
         Database.SaveResult[] saveResultList = Database.insert(orderItems, true);

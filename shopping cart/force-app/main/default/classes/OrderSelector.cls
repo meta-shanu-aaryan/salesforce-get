@@ -11,7 +11,7 @@ public with sharing class OrderSelector extends fflib_SObjectSelector {
         return PurchaseOrder__c.sObjectType;
     }
 
-    public static List<PurchaseOrder__c> getLastOrders(){
+    public List<PurchaseOrder__c> getLastOrders(){
         List<PurchaseOrder__c> purchaseOrderList = [SELECT Id, Name, Customer__r.Name, OrderDate__c, Status__c, TotalAmount__c FROM PurchaseOrder__c ORDER BY NAME DESC LIMIT 10];
         return purchaseOrderList;
     }
